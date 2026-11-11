@@ -9,11 +9,11 @@ Notas:
 - Curso codigo 369: https://codigo369.com/detallecurso/24
 - Código: 
   - La v0.1: Nace de https://github.com/fantasma369to/pos-ventas-30-04-2025
-  - La v0.2: Nace de https://github.com/fantasma369to/pos-ventas-30-04-2025
+  - La v0.2: Nace de https://github.com/fantasma369to/pos-ventas-18-06-2025
   - La v0.3: Nace de https://github.com/fantasma369to/pos-ventas-con-reportes 
 - Ramas: rama main nace de la v0.3, pero se crean nuevas ramas sistema-v0.1 (pos-ventas-30-04-2025), sistema-v0.3 (pos-ventas-30-04-2025), sistema-v0.3 (main)
 - Youtube: https://www.youtube.com/watch?v=URG4rnmdThs&t=43479s
-- Telegram grupo: [https://t.me/bumam_react o https://web.telegram.org/a/#-1003225502320](https://web.telegram.org/a/#-1001994511342_2463) o https://t.me/ada369react/2463
+- Telegram grupo: https://web.telegram.org/a/#-1001994511342_2463 o https://t.me/ada369react/2463
 
 
 ## React + Vite
