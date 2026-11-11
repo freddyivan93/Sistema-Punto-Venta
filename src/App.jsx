@@ -14,26 +14,26 @@ import { useLocation } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
-  const { setTheme } = useThemeStore();
+  const { setTheme, themeStyle } = useThemeStore();
   const { datausuarios } = useUsuariosStore();
   const location = useLocation();
-  const themeStyle = datausuarios?.tema ==="light"?Light:Dark
-  useEffect(() => {
-    if (location.pathname === "/login") {
-      setTheme({
-        tema: "light",
-        style: Light,
-      });
-    } else {
-      if (datausuarios) {
-        const themeStyle = datausuarios?.tema === "light" ? Light : Dark;
-        setTheme({
-          tema: datausuarios?.tema,
-          style: themeStyle,
-        });
-      }
-    }
-  }, [datausuarios]);
+  //const themeStyle = datausuarios?.tema ==="light"?Light:Dark
+  // useEffect(() => {
+  //   if (location.pathname === "/login") {
+  //     setTheme({
+  //       tema: "light",
+  //       style: Light,
+  //     });
+  //   } else {
+  //     if (datausuarios) {
+  //       const themeStyle = datausuarios?.tema === "light" ? Light : Dark;
+  //       setTheme({
+  //         tema: datausuarios?.tema,
+  //         style: themeStyle,
+  //       });
+  //     }
+  //   }
+  // }, [datausuarios]);
   return (
     <ThemeProvider theme={themeStyle}>
       <AuthContextProvider>

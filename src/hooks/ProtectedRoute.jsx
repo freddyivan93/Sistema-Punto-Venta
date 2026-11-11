@@ -20,7 +20,7 @@ export const ProtectedRoute = ({ children, accessBy }) => {
     enabled: !!datausuarios,
   });
   if(isLoadingPermisosGlobales){
-     return <span>cargando permisos...</span>
+    // return <span>cargando permisos...</span>
   }
   const hasPermission = dataPermisosGlobales?.some(
     (item) => item.modulos?.link === location.pathname

@@ -1,8 +1,10 @@
 import styled from "styled-components";
+import { v } from "../../../styles/variables";
 import {
   InputText,
   Btn1,
   useSucursalesStore,
+  ConvertirCapitalize,
   useEmpresaStore,
   useUsuariosStore,
   Device,
@@ -17,15 +19,17 @@ import { SelectList } from "../../ui/lists/SelectList";
 import { BarLoader } from "react-spinners";
 import { PermisosUser } from "../UsuariosDesign/PermisosUser";
 import { useRolesStore } from "../../../store/RolesStore";
-export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
+export function RegistrarUsuarios({ accion, dataSelect,onClose }) {
   const queryClient = useQueryClient();
   const {
     cajaSelectItem,
- 
+    setStateCaja,
+    insertarCaja,
+    editarCaja,
     mostrarCajaXSucursal,
-   
+    setCajaSelectItem,
   } = useCajasStore();
-  const { insertarUsuario, itemSelect, editarUsuarios } = useUsuariosStore();
+  const { insertarUsuario } = useUsuariosStore();
   const { dataempresa } = useEmpresaStore();
   const { mostrarSucursales, sucursalesItemSelect, selectSucursal } =
     useSucursalesStore();
@@ -48,45 +52,24 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({
-    defaultValues: {
-      nombres: itemSelect?.usuario,
-      email: itemSelect?.email,
-      nro_doc: itemSelect?.nro_doc,
-      telefono: itemSelect?.telefono,
-      pass: 123456,
-    },
-  });
+  } = useForm();
   const insertar = async (data) => {
+    const p = {
+      id: accion === "Editar" ? dataSelect?.id : null,
+      nombres: data.nombres,
+      nro_doc: data.nro_doc,
+      telefono: data.telefono,
+      id_rol: rolesItemSelect?.id,
+      correo: data.email,
+      //datos asignacion caja y sucursal
+      id_sucursal: sucursalesItemSelect?.id,
+      id_caja: cajaSelectItem?.id,
+      //datos credenciales
+      email: data.email,
+      pass: data.pass,
+    };
     if (accion === "Editar") {
-      const p = {
-        id: itemSelect?.id_usuario,
-        nombres: data.nombres,
-        nro_doc: data.nro_doc,
-        telefono: data.telefono,
-        id_rol: rolesItemSelect?.id,
-
-        //datos asignacion caja y sucursal
-       
-        
-      };
-      console.log("pEditar",p)
-      await editarUsuarios(p);
     } else {
-      const p = {
-        
-        nombres: data.nombres,
-        nro_doc: data.nro_doc,
-        telefono: data.telefono,
-        id_rol: rolesItemSelect?.id,
-        correo: data.email,
-        //datos asignacion caja y sucursal
-        id_sucursal: sucursalesItemSelect?.id,
-        id_caja: cajaSelectItem?.id,
-        //datos credenciales
-        email: data.email,
-        pass: data.pass,
-      };
       await insertarUsuario(p);
     }
   };
@@ -118,7 +101,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
             <Title>
               {accion === "Editar" ? "Editar usuario" : "Registrar usuario"}
             </Title>
-            <BtnClose funcion={onClose} />
+            <BtnClose funcion={onClose}/>
           </Header>
           <section className="main">
             <section className="area1">
@@ -132,8 +115,11 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                     />
                   }
                 >
-                  <input disabled ={accion==="Editar"?true:false}
+                  <input
                     className="form__field"
+                    defaultValue={
+                      accion === "Editar" ? dataSelect?.descripcion : ""
+                    }
                     type="text"
                     {...register("email", {
                       required: true,
@@ -153,7 +139,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                     />
                   }
                 >
-                  <input disabled ={accion==="Editar"?true:false}
+                  <input
                     className="form__field"
                     defaultValue={
                       accion === "Editar" ? dataSelect?.descripcion : ""
@@ -179,6 +165,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                 >
                   <input
                     className="form__field"
+                    defaultValue={dataSelect?.nombres}
                     type="text"
                     {...register("nombres", { required: true })}
                   />
@@ -200,6 +187,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                 >
                   <input
                     className="form__field"
+                    defaultValue={dataSelect?.nro_doc}
                     type="number"
                     {...register("nro_doc", { required: true })}
                   />
@@ -219,6 +207,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                 >
                   <input
                     className="form__field"
+                    defaultValue={dataSelect?.telefono}
                     type="text"
                     {...register("telefono", { required: true })}
                   />
@@ -228,7 +217,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                   )}
                 </InputText>
               </article>
-              <span>Asignación de sucursal</span>
+              <span>Asignación de caja</span>
               <article className="contentasignacion">
                 <span>Sucursal:</span>
                 <SelectList
@@ -238,7 +227,15 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                   data={dataSucursales}
                 />
               </article>
-
+              <article className="contentasignacion">
+                <span>Caja:</span>
+                <SelectList
+                  onSelect={setCajaSelectItem}
+                  itemSelect={cajaSelectItem}
+                  displayField="descripcion"
+                  data={dataCaja}
+                />
+              </article>
               <Btn1 titulo={"Guardar"} bgcolor={"#2c2ca8"} color={"#fff"} />
             </section>
             <section className="area2">
@@ -251,46 +248,40 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
   );
 }
 const Container = styled.div`
-  position: fixed;
+  transition: 0.5s;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1000;
+  position: fixed;
   display: flex;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start; /* Importante para que inicie desde arriba */
-  overflow-y: auto; /* Habilita scroll */
+  z-index: 1000;
   backdrop-filter: blur(5px);
-  padding: 1rem; /* Espacio en móvil */
 `;
 const Form = styled.form`
-   width: 100%;
-  max-width: 900px;
-  background-color: ${({ theme }) => theme.body};
-  padding: 20px;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-
+  background-color: ${({ theme }) => theme.body};
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  overflow-y: auto;
+  max-height: 90vh;
+  width: 100%;
+  margin: 10px;
+  border: 1px solid ${({ theme }) => theme.bg};
   .main {
     display: flex;
     flex-direction: column;
     gap: 15px;
     overflow-y: auto;
-    justify-content: center;
-
     @media ${Device.laptop} {
-      flex-direction: row;
+      
     }
     .area1 {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      align-items: center;
-    }
-    .area2 {
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -300,10 +291,7 @@ const Form = styled.form`
 `;
 const Header = styled.div`
   width: 100%;
-
   display: flex;
-  text-align: center;
-  justify-content: center;
 `;
 const Title = styled.span`
   font-size: 30px;

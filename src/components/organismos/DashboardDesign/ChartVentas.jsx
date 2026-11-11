@@ -10,29 +10,61 @@ import {
 } from "recharts";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";
-
+import { useVentasStore } from "../../../store/VentasStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useThemeStore } from "../../../store/ThemeStore";
-import {
-  useMostrarVentasDashboardPeriodoAnteriorQuery,
-  useMostrarVentasDashboardQuery,
-  useMostrarCantidadDetalleVentaDashboardQuery,useGananciasDetalleVentaQuery
-} from "../../../tanstack/ReportesStack";
-import { useReportesStore } from "../../../store/ReportesStore";
 export const ChartVentas = () => {
-  const { data, isLoading } = useMostrarVentasDashboardQuery();
-  const { data: data2 } = useMostrarVentasDashboardPeriodoAnteriorQuery();
-
- const {data:data3}= useMostrarCantidadDetalleVentaDashboardQuery();
-  const { totalventas, porcentajeCambio } = useReportesStore();
-  const {data:data4} = useGananciasDetalleVentaQuery()
   const { dataempresa } = useEmpresaStore();
+  const { porcentajeCambio } = useVentasStore();
 
-  const { themeStyle } = useThemeStore();
+  const {themeStyle} = useThemeStore()
   const isPositive = porcentajeCambio > 0;
   const isNeutral = porcentajeCambio === 0;
 
-
+  const data = [
+    {
+      name: "Page A",
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      name: "Page B",
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: "Page C",
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: "Page D",
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    },
+    {
+      name: "Page E",
+      uv: 1890,
+      pv: 4800,
+      amt: 2181,
+    },
+    {
+      name: "Page F",
+      uv: 2390,
+      pv: 3800,
+      amt: 2500,
+    },
+    {
+      name: "Page G",
+      uv: 3490,
+      pv: 4300,
+      amt: 2100,
+    },
+  ];
   return (
     <Container>
       <Header>
@@ -40,16 +72,11 @@ export const ChartVentas = () => {
       </Header>
       <MainInfo>
         <Revenue>
-          {FormatearNumeroDinero(
-            totalventas || 0,
-            dataempresa?.currency,
-            dataempresa?.iso
-          )}
+          {FormatearNumeroDinero(1000, dataempresa?.currency, dataempresa?.iso)}
         </Revenue>
         <Change>
           <Percentage>
-            <Icon
-              width="26"
+            <Icon  width="26"
               height="26"
               icon={
                 isNeutral
@@ -59,7 +86,7 @@ export const ChartVentas = () => {
                   : "iconamoon:arrow-down-2-fill"
               }
             ></Icon>
-            {porcentajeCambio}% al periodo anterior
+            56% al periodo anterior
           </Percentage>
         </Change>
       </MainInfo>
@@ -83,7 +110,7 @@ export const ChartVentas = () => {
           </defs>
           <CartesianGrid strokeOpacity={0.2} vertical={false} />
           <XAxis
-            dataKey="fecha"
+            dataKey="name"
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: "#9CA3AF" }}
@@ -93,7 +120,7 @@ export const ChartVentas = () => {
           <Area
             strokeWidth={1.5}
             type="monotone"
-            dataKey="total_ventas"
+            dataKey="uv"
             stroke={themeStyle.text}
             fill="url(#colorValue)"
             activeDot={{ r: 6 }}
@@ -121,7 +148,9 @@ const CustomTooltip = ({ active, payload, label }) => {
     );
   }
 };
-const Container = styled.div``;
+const Container = styled.div`
+ 
+`;
 const TooltipContainer = styled.div`
   background: ${({ theme }) => theme.bg};
   padding: 10px;
@@ -142,7 +171,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 20px;
+  padding-left:20px;
 `;
 
 const Title = styled.h3`
@@ -152,7 +181,7 @@ const Title = styled.h3`
 `;
 const MainInfo = styled.div`
   margin: 20px 0;
-  padding-left: 20px;
+  padding-left:20px;
 `;
 const Revenue = styled.div`
   font-size: 24px;

@@ -6,36 +6,34 @@ import { ChartVentas } from "../organismos/DashboardDesign/ChartVentas";
 import {ChartProductosTop5} from "../organismos/DashboardDesign/ChartProductosTop5"
 import { CardMovimientosCajaLive } from "../organismos/DashboardDesign/CardMovimientosCajaLive";
 import {CardProductosTopMonto} from "../organismos/DashboardDesign/CardProductosTopMonto"
-import { useReportesStore } from "../../store/ReportesStore";
 export const DashboardTemplate = () => {
-  const {totalventas,porcentajeCambio,totalCantidadDetalleVentas,totalGanancias} = useReportesStore() 
-   return (
+  return (
     <Container>
       <DashboardHeader />
       <MainContent>
         <Area1>
           <ContentTotales>
             <CardTotales
-              percentage={porcentajeCambio}
-              value={totalventas}
+              percentage={10}
+              value={45}
               title="Ventas"
               icon={"mdi:dollar"}
             />
           </ContentTotales>
           <ContentTotales>
             <CardTotales
-             
-              value={totalCantidadDetalleVentas}
-              title="Cant. Productos vendidos"
-              icon={"fluent-mdl2:product-variant"}
+              percentage={10}
+              value={45}
+              title="Ventas"
+              icon={"mdi:dollar"}
             />
           </ContentTotales>
           <ContentTotales>
             <CardTotales
-             
-              value={totalGanancias}
-              title="Ganancias"
-              icon={"hugeicons:money-send-circle"}
+              percentage={10}
+              value={45}
+              title="Ventas"
+              icon={"mdi:dollar"}
             />
           </ContentTotales>
         </Area1>

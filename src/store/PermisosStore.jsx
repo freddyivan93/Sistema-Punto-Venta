@@ -13,26 +13,13 @@ export const usePermisosStore = create((set, get) => ({
   selectedModules: [],
   setSelectedModules: (p) => set({ selectedModules: p }),
   toggleModule: (moduleId) => {
-    const { selectedModules, datapermisos } = get();
-    let updatedModules;
-    let updatedPermisos;
-
-    if (selectedModules.includes(moduleId)) {
-      // Desmarcar: remover de ambos
-      updatedModules = selectedModules.filter((id) => id !== moduleId);
-      updatedPermisos = datapermisos.filter((p) => p.idmodulo !== moduleId);
-    } else {
-      // Marcar: agregar a ambos
-      updatedModules = [...selectedModules, moduleId];
-      updatedPermisos = [...datapermisos, { idmodulo: moduleId }];
-    }
-
-    set({
-      selectedModules: updatedModules,
-      datapermisos: updatedPermisos,
-    });
+    const { selectedModules } = get();
+    const updatedModules = selectedModules.includes(moduleId)
+      ? selectedModules.filter((id) => id !== moduleId)
+      : [...selectedModules, moduleId];
+    console.log("modulos check onchange", updatedModules);
+    set({ selectedModules: updatedModules });
   },
-
   mostrarPermisos: async (p) => {
     const response = await MostrarPermisos(p);
     set({ datapermisos: response });
@@ -55,10 +42,10 @@ export const usePermisosStore = create((set, get) => ({
     set({ dataPermisosGlobales: response });
     return response;
   },
-  dataPermisosConfiguracion: [],
-  mostrarPermisosConfiguracion: async (p) => {
-    const response = await MostrarPermisosConfiguracion(p);
-    set({ dataPermisosConfiguracion: response });
+  dataPermisosConfiguracion:[],
+  mostrarPermisosConfiguracion: async(p) =>{
+    const response = await MostrarPermisosConfiguracion(p)
+    set({dataPermisosConfiguracion:response})
     return response;
-  },
+  }
 }));

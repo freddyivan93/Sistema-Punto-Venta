@@ -5,7 +5,6 @@ import {
   RegistrarCategorias,
   Title,
   useCategoriasStore,
-  useUsuariosStore,
 } from "../../index";
 import { RegistrarUsuarios } from "../organismos/formularios/RegistrarUsuarios";
 import { v } from "../../styles/variables";
@@ -17,16 +16,16 @@ import { useAsignacionCajaSucursalStore } from "../../store/AsignacionCajaSucurs
 import { TablaUsuarios } from "../organismos/tablas/TablaUsuarios";
 export function UsuariosTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false);
+ 
   const [dataSelect, setdataSelect] = useState([]);
-  const {setItemSelect} = useUsuariosStore()
   const [isExploding, setIsExploding] = useState(false);
   const {accion,setAccion,datausuariosAsignados,setBuscador} = useAsignacionCajaSucursalStore()
+
   function nuevoRegistro() {
     SetopenRegistro(!openRegistro);
     setAccion("Nuevo");
     setdataSelect([]);
     setIsExploding(false);
-    setItemSelect(null)
   }
   return (
     <Container>
@@ -56,7 +55,7 @@ export function UsuariosTemplate() {
       <section className="main">
         {isExploding && <ConfettiExplosion />}
         <TablaUsuarios
-          setdataSelect={setItemSelect}
+          setdataSelect={setdataSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}
           data={datausuariosAsignados}

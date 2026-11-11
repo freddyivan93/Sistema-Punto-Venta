@@ -8,7 +8,6 @@ import { usePermisosStore } from "../../../store/PermisosStore";
 import { useEffect } from "react";
 import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
 import { BarLoader } from "react-spinners";
-import { useUsuariosStore } from "../../../store/UsuariosStore";
 export const PermisosUser = () => {
   const {
     mostrarPermisos,
@@ -17,31 +16,30 @@ export const PermisosUser = () => {
     setSelectedModules,
     mostrarPermisosDefault,
     actualizarPermisos,
-    datapermisos,
   } = usePermisosStore();
   const { accion, selectItem: selectItemAsignaciones } =
     useAsignacionCajaSucursalStore();
   const { mostrarModulos } = useModulosStore();
-  const { mostrarRoles, rolesItemSelect, setRolesItemSelect,dataroles } = useRolesStore();
-  const { itemSelect } = useUsuariosStore();
+  const { mostrarRoles, rolesItemSelect, setRolesItemSelect } = useRolesStore();
 
   const { data: datamodulos, isLoading: isLoadingModulos } = useQuery({
     queryKey: ["mostrar modulos"],
     queryFn: mostrarModulos,
   });
-
+  const { data: dataRoles, isLoading: isLoadingRoles } = useQuery({
+    queryKey: ["mostrar roles"],
+    queryFn: mostrarRoles,
+  });
   const { data: dataPermisosDefault, isLoading: isLoadingPermisosDefault } =
     useQuery({
       queryKey: ["mostrar permisos default"],
       queryFn: mostrarPermisosDefault,
     });
-  const { isLoading: isLoadingPermisosUser } = useQuery({
-    queryKey: [
-      "mostrar permisos por usuario",
-      { id_usuario: itemSelect?.id_usuario },
-    ],
-    queryFn: () => mostrarPermisos({ id_usuario: itemSelect?.id_usuario }),
-    enabled: !!itemSelect,
+  const { data: datapermisos, isLoading: isLoadingPermisosUser } = useQuery({
+    queryKey: ["mostrar permisos por usuario"],
+    queryFn: () =>
+      mostrarPermisos({ id_usuario: selectItemAsignaciones?.id_usuario }),
+    enabled: !!selectItemAsignaciones,
   });
   const mutation = useMutation({
     mutationKey: ["actualizar permisos"],
@@ -54,22 +52,12 @@ export const PermisosUser = () => {
           ?.filter((permiso) => permiso.id_rol === rolesItemSelect?.id)
           .map((permiso) => permiso.id_modulo) || [];
       setSelectedModules(permisosPorRol);
-    }else{
-       setRolesItemSelect({
-          id: itemSelect.id_rol,
-          nombre: itemSelect.rol,
-       });
     }
-  }, []);
-  useEffect(() => {
-    if (accion !== "Nuevo" && datapermisos) {
-      const permisosUsuario = datapermisos.map((p) => p.idmodulo);
-      setSelectedModules(permisosUsuario);
-    }
-  }, [accion, datapermisos]);
+  }, [rolesItemSelect, setSelectedModules, dataPermisosDefault]);
+
   const isLoading =
     isLoadingModulos ||
-   
+    isLoadingRoles ||
     isLoadingPermisosDefault ||
     isLoadingPermisosUser;
   if (isLoading) return <BarLoader />;
@@ -78,28 +66,22 @@ export const PermisosUser = () => {
       <Title>permisos</Title>
       <label>Tipo: </label>
       <SelectList
-        data={dataroles}
+        data={dataRoles}
         displayField="nombre"
         onSelect={setRolesItemSelect}
         itemSelect={rolesItemSelect}
       />
       <List>
-        {datamodulos?.map((module, index) => {
-          const isChecked = itemSelect
-            ? datapermisos?.some(
-                (p) => String(p.idmodulo) === String(module.id)
-              )
-            : selectedModules.includes(module.id);
-          return (
-            <ListItem key={module.id}>
-              <Check
-                checked={isChecked}
-                onChange={() => toggleModule(module.id)}
-              />
-              <Label>{module.nombre} </Label>
-            </ListItem>
-          );
-        })}
+        {datamodulos?.map((module) => (
+          <ListItem key={module.id}>
+            <Check
+             
+              checked={selectedModules.includes(module?.id)}
+              onChange={() => toggleModule(module.id)}
+            />
+            <Label>{module.nombre} </Label>
+          </ListItem>
+        ))}
       </List>
     </Container>
   );
@@ -109,6 +91,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 1.5rem;
+  border-left: 1px dashed ${({ theme }) => theme.text};
 `;
 const Title = styled.span`
   font-size: 1.5rem;

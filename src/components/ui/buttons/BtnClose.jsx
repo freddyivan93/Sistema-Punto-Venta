@@ -9,7 +9,7 @@ export function BtnClose({funcion}) {
 }
 const Container = styled.div`
 position: absolute;
-right:25px;
+right:15px;
 top:15px;
 font-size:35px;
 cursor: pointer;

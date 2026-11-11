@@ -19,22 +19,18 @@ import { Dashboard } from "../pages/Dashboard";
 import { SucursalesCaja } from "../pages/SucursalesCaja";
 import { Impresoras } from "../pages/Impresoras";
 import { Usuarios } from "../pages/Usuarios";
-import { Almacenes } from "../pages/Almacenes";
+import {Almacenes} from "../pages/Almacenes"
 import { Inventario } from "../pages/Inventario";
 import { ConfiguracionTicket } from "../pages/ConfiguracionTicket";
 import { MiPerfil } from "../pages/MiPerfil";
 import { SerializacionComprobantes } from "../pages/SerializacionComprobantes";
-import { Reportes } from "../pages/Reportes";
-import { ReportInventarios } from "../components/organismos/reports/ReportInventarios";
-import ReportVentas from "../components/organismos/reports/ReportVentas";
-import ReportStockBajoMinimo from "../components/organismos/reports/ReportStockBajoMinimo";
-
 export function MyRoutes() {
   return (
     <Routes>
       <Route
         path="/login"
         element={
+          
           <ProtectedRoute accessBy="non-authenticated">
             <Login />
           </ProtectedRoute>
@@ -51,7 +47,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      <Route
+        <Route
         path="/miperfil"
         element={
           <Layout>
@@ -61,8 +57,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      
-      <Route
+       <Route
         path="/inventario"
         element={
           <Layout>
@@ -72,20 +67,6 @@ export function MyRoutes() {
           </Layout>
         }
       />
-       <Route
-        path="/reportes"
-        element={
-          <Layout>
-            <ProtectedRoute accessBy="authenticated">
-              <Reportes />
-            </ProtectedRoute>
-          </Layout>
-        }
-      >
-        <Route path="inventario_valorado" element={<ReportInventarios/>}  />
-        <Route path="report_ventas" element={<ReportVentas/>}  />
-         <Route path="report_stock_bajo_minimo" element={<ReportStockBajoMinimo />} />
-      </Route>
       <Route
         path="/configuracion/categorias"
         element={
@@ -106,7 +87,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      <Route
+       <Route
         path="/configuracion/ticket"
         element={
           <Layout>
@@ -191,7 +172,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      <Route
+       <Route
         path="/dashboard"
         element={
           <Layout>

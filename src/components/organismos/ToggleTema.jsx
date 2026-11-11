@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUsuariosStore } from "../../store/UsuariosStore";
 import { Dark, Light } from "../../styles/themes";
 export function ToggleTema() {
-  const { editarThemeUser, datausuarios } = useUsuariosStore();
+  const { editarUsuarios, datausuarios } = useUsuariosStore();
   const { setTheme, theme } = useThemeStore();
   const queryClient = useQueryClient();
   const editarTemaUser = async () => {
@@ -19,9 +19,9 @@ export function ToggleTema() {
       tema: themeUse,
     };
 
-    await editarThemeUser(p);
+    await editarUsuarios(p);
   };
-  const { mutate,isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["editar tema"],
     mutationFn: editarTemaUser,
     onError: (error) => {
@@ -35,9 +35,6 @@ export function ToggleTema() {
   return (
     <Container>
       <div className="container">
-        {
-          isPending && <span>espera...</span>
-        }
         <label className="toggle">
           <input
             id="switch"

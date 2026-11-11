@@ -1,12 +1,10 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import styled from "styled-components";
 import { Device } from "../../../styles/breakpoints";
-import { FormatearNumeroDinero } from "../../../utils/Conversiones";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
+
 export const CardTotales = ({ title, icon, value, percentage }) => {
   const isPositive = percentage > 0;
   const isNeutral = percentage === 0;
-  const {dataempresa} = useEmpresaStore()
 
   return (
     <Container>
@@ -14,20 +12,12 @@ export const CardTotales = ({ title, icon, value, percentage }) => {
         <TitleText>{title} </TitleText>
         <Icon width="20" height="20" icon={icon} />
       </Title>
-      
-      <SalesValue>{FormatearNumeroDinero(
-                  value || 0,
-                  dataempresa?.currency,
-                  dataempresa?.iso
-                )}  </SalesValue>
-      {
-        percentage!=undefined &&<Percentage isPositive={isPositive} isNeutral={isNeutral}>
+      <SalesValue>{value} </SalesValue>
+      <Percentage isPositive={isPositive} isNeutral={isNeutral}>
        <Icon icon={isNeutral?"akar-icons:minus":isPositive?"iconamoon:arrow-up-2-fill":"iconamoon:arrow-down-2-fill"}   width="16"
           height="16"/>
         {percentage}% al periodo anterior
       </Percentage>
-      }
-      
     </Container>
   );
 };

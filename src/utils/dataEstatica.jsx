@@ -46,11 +46,11 @@ export const LinksArray = [
     icon: "flat-ui:box",
     to: "/inventario",
   },
-  {
-    label: "Reportes",
-    icon: "flat-ui:graph",
-    to: "/reportes",
-  },
+  // {
+  //   label: "Reportes",
+  //   icon: "flat-ui:graph",
+  //   to: "/reportes",
+  // },
  
 ];
 export const SecondarylinksArray = [
