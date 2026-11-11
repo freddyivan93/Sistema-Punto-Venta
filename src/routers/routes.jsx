@@ -25,9 +25,6 @@ import { ConfiguracionTicket } from "../pages/ConfiguracionTicket";
 import { MiPerfil } from "../pages/MiPerfil";
 import { SerializacionComprobantes } from "../pages/SerializacionComprobantes";
 import { Reportes } from "../pages/Reportes";
-import { ReportInventarios } from "../components/organismos/reports/ReportInventarios";
-import ReportVentas from "../components/organismos/reports/ReportVentas";
-import ReportStockBajoMinimo from "../components/organismos/reports/ReportStockBajoMinimo";
 
 export function MyRoutes() {
   return (
@@ -61,7 +58,16 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      
+       <Route
+        path="/reportes"
+        element={
+          <Layout>
+            <ProtectedRoute accessBy="authenticated">
+              <Reportes />
+            </ProtectedRoute>
+          </Layout>
+        }
+      />
       <Route
         path="/inventario"
         element={
@@ -72,20 +78,6 @@ export function MyRoutes() {
           </Layout>
         }
       />
-       <Route
-        path="/reportes"
-        element={
-          <Layout>
-            <ProtectedRoute accessBy="authenticated">
-              <Reportes />
-            </ProtectedRoute>
-          </Layout>
-        }
-      >
-        <Route path="inventario_valorado" element={<ReportInventarios/>}  />
-        <Route path="report_ventas" element={<ReportVentas/>}  />
-         <Route path="report_stock_bajo_minimo" element={<ReportStockBajoMinimo />} />
-      </Route>
       <Route
         path="/configuracion/categorias"
         element={

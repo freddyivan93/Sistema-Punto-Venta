@@ -21,21 +21,6 @@ export const useMostrarAlmacenesXSucursalQuery = () => {
     enabled: !!dataCierreCaja,
   });
 };
-export const useMostrarAlmacenesXSucursalSelectQuery = () => {
-  const { sucursalesItemSelect } = useSucursalesStore();
-  const { mostrarAlmacenesXSucursal } = useAlmacenesStore();
-  return useQuery({
-    queryKey: [
-      "mostrar almacen por sucursal select",
-      { id_sucursal: sucursalesItemSelect?.id },
-    ],
-    queryFn: () =>
-      mostrarAlmacenesXSucursal({
-        id_sucursal: sucursalesItemSelect?.id,
-      }),
-   
-  });
-};
 export const useMostrarAlmacenesXSucursalInventarioQuery = () => {
   const { sucursalesItemSelect } = useSucursalesStore();
   
